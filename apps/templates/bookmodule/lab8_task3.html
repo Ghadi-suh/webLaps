@@ -1,0 +1,31 @@
+{% extends "layouts/base.html" %}
+{% block title %}lab8 task 3{% endblock %}
+
+{% block content %}
+<h1>Books with Edition ≤ 3 and Title/Author does NOT contain "co"</h1>
+
+{% if books %}
+<table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Edition</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr>
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.edition }}</td>
+            <td>{{ book.price }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p>No books match this criteria.</p>
+{% endif %}
+{% endblock content %}

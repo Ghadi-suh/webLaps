@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render 
 from .models import Book
+from django.db.models import Q
+from django.db.models import Count, Sum, Avg, Max, Min
 
 
 def indexx(request): 
@@ -82,3 +84,42 @@ def lookup_query(request):
         return render(request, 'bookmodule/bookList.html', {'books':mybooks})
     else:
         return render(request, 'bookmodule/index.html')
+
+def lab8_task1(request):
+    books = Book.objects.filter(Q(price__lte=20))
+    context = {'books': books}
+    return render(request, 'bookmodule/lab8_task1.html', context)
+
+def lab8_task2(request):
+    books = Book.objects.filter(
+        Q(edition__gt=3) &
+        (Q(title__icontains='co') | Q(author__icontains='co'))
+    )
+    context = {'books': books}
+    return render(request, 'bookmodule/lab8_task2.html', context)
+
+def lab8_task3(request):
+    books = Book.objects.filter(
+        Q(edition__lte=3) &
+        (~Q(title__icontains='co') |
+        ~Q(author__icontains='co'))
+    )
+    context = {'books': books}
+    return render(request, 'bookmodule/lab8_task3.html', context)
+
+def lab8_task4(request):
+    books = Book.objects.all().order_by('title')  # ascending alphabetical order
+    context = {'books': books}
+    return render(request, 'bookmodule/lab8_task4.html', context)
+
+
+def lab8_task5(request):
+    stats = Book.objects.aggregate(
+        num_books=Count('id'),
+        total_price=Sum('price'),
+        avg_price=Avg('price'),
+        max_price=Max('price'),
+        min_price=Min('price')
+    )
+    context = {'stats': stats}
+    return render(request, 'bookmodule/lab8_task5.html', context)

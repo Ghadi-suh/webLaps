@@ -1,0 +1,18 @@
+{% extends "layouts/base.html" %}
+{% block title %}lab8 task 5{% endblock %}
+
+{% block content %}
+<h1>Book Statistics</h1>
+
+{% if stats %}
+    <ul>
+        <li><strong>Number of Books:</strong> {{ stats.num_books }}</li>
+        <li><strong>Total Price of All Books:</strong> ${{ stats.total_price }}</li>
+        <li><strong>Average Price:</strong> ${{ stats.avg_price }}</li>
+        <li><strong>Maximum Price:</strong> ${{ stats.max_price }}</li>
+        <li><strong>Minimum Price:</strong> ${{ stats.min_price }}</li>
+    </ul>
+{% else %}
+    <p>No books available.</p>
+{% endif %}
+{% endblock content %}
