@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Students List</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }
+        h1 { color: #333; }
+        a.button {
+            display: inline-block;
+            padding: 8px 15px;
+            margin-bottom: 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        ul { list-style: none; padding: 0; }
+        li {
+            background: white;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .actions a {
+            margin-left: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .actions a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+<h1>Students list</h1>
+<a href="{% url 'add_student2' %}" class="button">Add New Student</a>
+<ul>
+    {% for student in students %}
+        <li>
+            <div>
+              <Strong>student name:</strong>{{ student.name }} <Strong>Addresses: </strong>
+                {% for address in student.addresses.all %}
+                {{ address.city }}{% if not forloop.last %} - {% endif %}
+                {% empty %}
+                    No address
+                {% endfor %}
+            |</div>
+            <div class="actions">
+                <a href="{% url 'update_student2' student.id %}">Edit</a> |
+                <a href="{% url 'delete_student2' student.id %}">Delete</a>
+            </div>
+ </li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

@@ -1,8 +1,9 @@
-from django.shortcuts import render
-from .models import Address
-from django.db.models import Count, Min
-from .models import Student, Card, Department, Course, StudentLap9
+from django.shortcuts import render, get_object_or_404, redirect
 from django.db import models
+from .models import Address,  Student, Card, Department, Course, StudentLap9, Address2,  Student2, Photo
+from django.db.models import Count, Min
+from .forms import StudentForm, Student2Form
+from .forms import PhotoForm
 
 
 def lab8_task7(request):
@@ -41,3 +42,97 @@ def lab9_task4(request):
     )
 
     return render(request, 'usermodule/lab9_task4.html', {'departments': departments})    
+
+
+    
+# List all students
+def student_list(request):
+    students = Student.objects.all()
+    return render(request, 'usermodule/student_list.html', {'students': students})
+
+# Add a student
+def student_add(request):
+    if request.method == 'POST':
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('student_list')
+    else:
+        form = StudentForm()
+    return render(request, 'usermodule/student_form.html', {'form': form})
+
+# Update a student
+def student_update(request, pk):
+    student = get_object_or_404(Student, pk=pk)
+    if request.method == 'POST':
+        form = StudentForm(request.POST, instance=student)
+        if form.is_valid():
+            form.save()
+            return redirect('student_list')
+    else:
+        form = StudentForm(instance=student)
+    return render(request, 'usermodule/student_form.html', {'form': form})
+
+# Delete a student
+def student_delete(request, pk):
+    student = get_object_or_404(Student, pk=pk)
+    if request.method == 'POST':
+        student.delete()
+        return redirect('student_list')
+    return render(request, 'usermodule/student_delete.html', {'student': student})
+
+
+
+def students2_list(request):
+    students = Student2.objects.all()
+    return render(request, 'usermodule/students2_list.html', {'students': students})
+
+
+def add_student2(request):
+    if request.method == 'POST':
+        form = Student2Form(request.POST)
+        if form.is_valid():
+            student = form.save()
+            return redirect('students2_list')  # adjust to your URL name
+    else:
+        form = Student2Form()
+    return render(request, 'usermodule/student2_form.html', {'form': form})
+
+
+
+def update_student2(request, student_id):
+    student = get_object_or_404(Student2, id=student_id)
+    if request.method == 'POST':
+        form = Student2Form(request.POST, instance=student)
+        if form.is_valid():
+            form.save()
+            return redirect('students2_list')
+    else:
+        form = Student2Form(instance=student)
+    return render(request, 'usermodule/student2_form.html', {'form': form})
+
+
+
+def delete_student2(request, student_id):
+    student = get_object_or_404(Student2, id=student_id)
+    if request.method == 'POST':
+        student.delete()
+        return redirect('students2_list')
+    return render(request, 'usermodule/student2_delete.html', {'student': student})
+
+
+
+def upload_photo(request):
+    if request.method == 'POST':
+        form = PhotoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('list_photos')  # or any page you want
+    else:
+        form = PhotoForm()
+    return render(request, 'usermodule/upload_photo.html', {'form': form})
+
+
+def list_photos(request):
+    photos = Photo.objects.all()
+    return render(request, 'usermodule/photo_list.html', {'photos': photos})

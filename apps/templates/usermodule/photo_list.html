@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Photo List</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f0f8ff; }
+        h1 { color: #333; }
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .photo-card {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        a.button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Uploaded Photos</h1>
+
+<a href="{% url 'upload_photo' %}" class="button">Upload New Photo</a>
+
+<div class="photo-grid">
+    {% for photo in photos %}
+    <div class="photo-card">
+        <img src="{{ photo.image.url }}" alt="Photo">
+    </div>
+    {% empty %}
+    <p>No photos uploaded yet.</p>
+    {% endfor %}
+</div>
+
+</body>
+</html>
