@@ -36,7 +36,13 @@
         }
     </style>
 </head>
-
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 <body>
 <h1>Students list</h1>
 <a href="{% url 'add_student2' %}" class="button">Add New Student</a>
@@ -57,7 +63,9 @@
             </div>
  </li>
     {% endfor %}
+    <div class="actions">
+       <a href="{% url 'logout' %}"> logout</a>
+    </div>
 </ul>
-
 </body>
 </html>

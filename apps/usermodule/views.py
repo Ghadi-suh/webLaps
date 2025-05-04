@@ -4,6 +4,11 @@ from .models import Address,  Student, Card, Department, Course, StudentLap9, Ad
 from django.db.models import Count, Min
 from .forms import StudentForm, Student2Form
 from .forms import PhotoForm
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout, login, authenticate
+from django.contrib.auth.forms import AuthenticationForm
 
 
 def lab8_task7(request):
@@ -46,6 +51,7 @@ def lab9_task4(request):
 
     
 # List all students
+@login_required(login_url='/users/login/')
 def student_list(request):
     students = Student.objects.all()
     return render(request, 'usermodule/student_list.html', {'students': students})
@@ -82,7 +88,7 @@ def student_delete(request, pk):
     return render(request, 'usermodule/student_delete.html', {'student': student})
 
 
-
+@login_required(login_url='/users/login/')
 def students2_list(request):
     students = Student2.objects.all()
     return render(request, 'usermodule/students2_list.html', {'students': students})
@@ -136,3 +142,37 @@ def upload_photo(request):
 def list_photos(request):
     photos = Photo.objects.all()
     return render(request, 'usermodule/photo_list.html', {'photos': photos})
+
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'You have successfully registered.')
+            return redirect('loginView')
+    else:
+        form = UserCreationForm()
+    return render(request, 'usermodule/register.html', {'form': form})
+
+
+
+
+def loginView(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            messages.success(request, 'Login successful.')
+            return redirect('students2_list')  
+        else:
+            messages.error(request, 'Invalid username or password.')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'usermodule/login.html', {'form': form})
+
+def logout_view(request):
+    logout(request)
+    return redirect('loginView')

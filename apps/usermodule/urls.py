@@ -19,6 +19,9 @@ urlpatterns = [
     path('lab11/students2/delete/<int:student_id>/', views.delete_student2, name='delete_student2'),
     path('lab11/photos/', views.list_photos, name='list_photos'),
     path('lab11/photos/add/', views.upload_photo, name='upload_photo'),
+    path('register/', views.register, name='register'),
+    path('login/', views.loginView, name='loginView'),
+    path('logout/', views.logout_view, name='logout'),
 ] 
 
 
